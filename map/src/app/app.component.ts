@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
+
 import { environment } from '../environments/environment';
-import moment from 'moment';
+
 
 const API_URL = environment.API_URL;
 const API_KEY = environment.API_KEY;
