@@ -4,7 +4,7 @@ import { PLATFORM_ID } from '@angular/core';
 
 import { environment } from '../environments/environment';
 
-
+//*
 const API_URL = environment.API_URL;
 const API_KEY = environment.API_KEY;
 
