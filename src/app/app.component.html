@@ -1,0 +1,106 @@
+<div class="container">
+  <div class="map-section">
+    <google-map [center]="center" [zoom]="zoom" height="400px" width="100%" (mapInitialized)="onMapInitialized($event)">
+      <map-marker *ngFor="let city of cities" [position]="city.position" [title]="city.name" [label]="city.name"
+        (mapClick)="onCityClick(city)">
+      </map-marker>
+    </google-map>
+  </div>
+  <div class="main-card">
+    <div class="main-card-header">
+      <div class="search-container">
+        <input type="text" [(ngModel)]="searchText" (keyup)="onSearch()" placeholder="Search"
+          class="search-input">
+        <span class="search-icon">🔍</span>
+      </div>
+    </div>
+    <div class="scrollable-content">
+      <div class="sensor-grid">
+        <div *ngFor="let city of filteredCities" class="sensor-card" [class.selected]="selectedCardId === city.name"
+          (click)="onCardClick(city)">
+          <div class="sensor-header">
+            <span class="sensor-title">Sıcaklık ve Nem Sensörü</span>
+            <span class="sensor-location">{{city.name}}</span>
+            <div class="battery-indicator" [class.full]="true">•</div>
+          </div>
+          <div class="sensor-data">
+            <div class="temperature">
+              <span class="icon">🌡️</span>
+              <span class="value">{{city.temp || '21'}} °C</span>
+            </div>
+            <div class="humidity">
+              <span class="icon">💧</span>
+              <span class="value">% {{city.humidity || '36'}}</span>
+            </div>
+          </div>
+          <div class="sensor-footer">
+            <span class="timestamp"> {{today | date: 'dd/MM/yyyy HH:mm'}}</span> 
+            <button class="settings-button">⚙️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #infoWindowContent>
+    <div class="info-window">
+      <h3><a style="color: rgb(159, 159, 220);">{{cityName}}</a> Nem ve Sıcaklık Sensörü</h3>
+      <div class="sensor-row">
+        <span class="sensor-value">🌡️ <strong>{{temp}} °C</strong></span>
+        <button class="sensor-button" id="tempButton"><strong>Sıcaklık</strong> Ayarla</button>
+      </div>
+      <div class="sensor-row">
+        <span class="sensor-value">💧 <strong>% {{humidity}}</strong></span>
+        <button class="sensor-button" id="humidityButton"><strong>Nem</strong> Ayarla</button>
+      </div>
+
+    </div>
+    <div id="tempDialog" class="temp-dialog" style="display: none;">
+      <div class="dialog-content">
+        <h4>Sıcaklık Ayarla</h4>
+        <div class="temp-settings">
+          <div class="temp-column">
+            <span class="temp-label">Mevcut</span>
+            <img slot="end" width="50px" height="50px" [src]="weatherIcon">
+            <div class="temp-value">{{temp}} °C</div>
+          </div>
+          <div class="temp-column">
+            <span class="temp-label">Yeni</span>
+            <div class="temp-input-wrapper">
+              <input type="number" [(ngModel)]="newTemp" class="temp-input" />
+              <span class="unit">°C</span>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-buttons">
+          <button class="cancel-btn">İptal et</button>
+          <button class="update-btn" (click)="updateTemp()">Güncelle</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="humidityDialog" class="temp-dialog" style="display: none;">
+      <div class="dialog-content">
+        <h4>Nem Ayarla</h4>
+        <div class="temp-settings">
+          <div class="temp-column">
+            <span class="temp-label">Mevcut</span>
+            
+            
+            <div class="temp-value">% {{humidity}}</div>
+          </div>
+          <div class="temp-column">
+            <span class="temp-label">Yeni</span>
+            <div class="temp-input-wrapper">
+              <input type="number" [(ngModel)]="newHumidity" class="temp-input" />
+              <span class="unit">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-buttons">
+          <button class="cancel-btn-humidity">İptal et</button>
+          <button class="update-btn-humidity">Güncelle</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
